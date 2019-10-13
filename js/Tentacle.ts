@@ -1,0 +1,59 @@
+class Tentacle {
+  segments: Segment[];
+  provideTarget: () => p5.Vector;
+
+  constructor(
+    numSegments: number,
+    fullLength: number,
+    baseHueOf100: number,
+    provideTarget: () => p5.Vector
+  ) {
+    let prevPos: p5.Vector = createVector(width / 2, height * 1.1);
+    const myHue = random(baseHueOf100 - 5, baseHueOf100 + 5);
+    const avgSegmentLength = fullLength / numSegments;
+    this.provideTarget = provideTarget;
+    this.segments = collectDistributedBetween(
+      numSegments,
+      0,
+      0.9,
+      (thickness, ix) => {
+        const segment = Segment.createRandomAt(
+          "Seg" + ix,
+          prevPos,
+          null,
+          1 - thickness,
+          avgSegmentLength,
+          myHue
+        );
+        prevPos = segment.b.copy();
+        return segment;
+      }
+    );
+    this.segments[0].isFixed = true;
+
+    let thinnerSegment: Segment = null;
+    this.segments.reverse().forEach(seg => {
+      seg.target = thinnerSegment
+        ? thinnerSegment
+        : { pos: this.provideTarget };
+      thinnerSegment = seg;
+    });
+    this.segments.reverse();
+  }
+  update() {
+    this.segments.reverse();
+    for (let s of this.segments) {
+      s.update();
+    }
+    this.segments.reverse();
+  }
+
+  draw() {
+    for (let s of this.segments) {
+      s.drawSilhoutte();
+    }
+    for (let s of this.segments) {
+      s.drawInner();
+    }
+  }
+}
