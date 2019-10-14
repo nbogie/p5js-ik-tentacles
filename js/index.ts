@@ -1,17 +1,19 @@
 "use strict";
 p5.disableFriendlyErrors = true;
-let appOptions: AppOptions = randomAppOptions();
 
 interface AppOptions {
-  isMovingStructures: boolean;
+  shouldDrawShadows: boolean;
 }
+
 let defaultAppOptions: AppOptions = {
-  isMovingStructures: true
+  shouldDrawShadows: true
 };
+
+let appOptions: AppOptions = defaultAppOptions;
 
 function randomAppOptions(): AppOptions {
   return {
-    isMovingStructures: randomBoolean()
+    shouldDrawShadows: randomBoolean()
   };
 }
 
@@ -25,11 +27,20 @@ function collect<T>(n: number, fn: (ix: number) => T): T[] {
   return res;
 }
 function mouseHasMoved() {
-  return dist(pmouseX, pmouseY, mouseX, mouseY) > 4;
+  return dist(pmouseX, pmouseY, mouseX, mouseY) > 0;
 }
+function noisyMousePos(phase: number) {
+  //undulating attention
+  const amp = map(sin(frameCount / 20), -1, 1, 10, 40);
+
+  const offsetX = map(noise(3 * phase + frameCount / 20), 0, 1, -amp, amp);
+  const offsetY = map(noise(4 * phase + frameCount / 20), 0, 1, -amp, amp);
+  return mousePosAsVector().add(createVector(offsetX, offsetY));
+}
+
 function makeTargetProvider(phase: number) {
   const perliner = makePerlinNoisePosFn(phase);
-  return () => (mouseHasMoved() ? mousePosAsVector() : perliner());
+  return () => (mouseHasMoved() ? noisyMousePos(phase) : perliner());
 }
 function makePerlinNoisePosFn(phase: number) {
   return () =>
@@ -46,7 +57,7 @@ function makePerlinNoisePosFn(phase: number) {
 }
 function rebuildTentacles() {
   const baseHue = random(100);
-  gTentacles = collect(4, ix => {
+  gTentacles = collect(gNumTentacles, ix => {
     const targetProvider = makeTargetProvider(ix * 1000);
     return new Tentacle(200, height, baseHue, targetProvider);
   });
@@ -74,14 +85,15 @@ function draw() {
   gTentacles.forEach(t => t.draw());
 }
 
-function toggleMovingStructures() {
-  appOptions.isMovingStructures = !appOptions.isMovingStructures;
+function toggleShouldCastShadows() {
+  appOptions.shouldDrawShadows = !appOptions.shouldDrawShadows;
 }
 
 function mousePressed() {
   rebuildTentacles();
 }
 function keyPressed() {
-  if (key == " ") {
+  if (key == "s") {
+    toggleShouldCastShadows();
   }
 }

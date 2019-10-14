@@ -48,8 +48,19 @@ class Segment implements Target {
     this.a.add(offset);
     this.b.add(offset);
   }
+  drawShadow() {
+    const off = createVector(20, 10);
+    stroke(color(this.myHue, 0, 0, 20));
+    noFill();
+    strokeWeight(this.thickness);
+    line(
+      off.x + this.a.x,
+      off.y + this.a.y,
+      off.x + this.b.x,
+      off.y + this.b.y
+    );
+  }
   drawSilhoutte() {
-    stroke(this.edgeColor);
     noFill();
     stroke(10);
     strokeWeight(this.thickness);
