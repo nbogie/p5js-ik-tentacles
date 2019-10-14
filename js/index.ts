@@ -1,8 +1,5 @@
 "use strict";
 p5.disableFriendlyErrors = true;
-
-let testSegment: Segment;
-
 let appOptions: AppOptions = randomAppOptions();
 
 interface AppOptions {
@@ -47,32 +44,23 @@ function makePerlinNoisePosFn(phase: number) {
       height * noise(88888 + phase + frameCount / 100)
     );
 }
+function rebuildTentacles() {
+  const baseHue = random(100);
+  gTentacles = collect(4, ix => {
+    const targetProvider = makeTargetProvider(ix * 1000);
+    return new Tentacle(200, height, baseHue, targetProvider);
+  });
+}
 /* ------------------------------------------------------------------
  * SETUP
  */
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  const baseHue = random(100);
-
-  gTentacles = collect(4, ix => {
-    const targetProvider = makeTargetProvider(ix * 1000);
-    return new Tentacle(200, height, baseHue, targetProvider);
-  });
-  //gTentacles.length = 0;
-  frameRate(30);
-  testSegment = new Segment(
-    "test",
-    createVector(300, 300),
-    createVector(350, 300),
-    { pos: mousePosAsVector },
-    1,
-    0
-  );
+  rebuildTentacles();
 }
 
 function update() {
   gTentacles.forEach(t => t.update());
-  testSegment.update();
 }
 
 /* ---------------------------------------------------------------------------
@@ -90,7 +78,9 @@ function toggleMovingStructures() {
   appOptions.isMovingStructures = !appOptions.isMovingStructures;
 }
 
-function mousePressed() {}
+function mousePressed() {
+  rebuildTentacles();
+}
 function keyPressed() {
   if (key == " ") {
   }
