@@ -44,7 +44,10 @@ class Segment implements Target {
   pos(): p5.Vector {
     return this.a.copy();
   }
-
+  translate(offset: p5.Vector) {
+    this.a.add(offset);
+    this.b.add(offset);
+  }
   drawSilhoutte() {
     stroke(this.edgeColor);
     noFill();

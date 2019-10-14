@@ -8,10 +8,14 @@ class Tentacle {
     baseHueOf100: number,
     provideTarget: () => p5.Vector
   ) {
-    let prevPos: p5.Vector = createVector(width / 2, height * 1.1);
     const myHue = random(baseHueOf100 - 5, baseHueOf100 + 5);
     const avgSegmentLength = fullLength / numSegments;
     this.provideTarget = provideTarget;
+
+    let prevPos: p5.Vector = createVector(
+      random(width * 0.4, width * 0.6),
+      height * 1.1
+    );
     this.segments = collectDistributedBetween(
       numSegments,
       0,
@@ -41,11 +45,16 @@ class Tentacle {
     this.segments.reverse();
   }
   update() {
+    const originalLockedPos = this.segments[0].a.copy();
     this.segments.reverse();
     for (let s of this.segments) {
       s.update();
     }
     this.segments.reverse();
+    const moveBackDelta = originalLockedPos
+      .copy()
+      .sub(this.segments[0].a.copy());
+    this.segments.forEach(s => s.translate(moveBackDelta));
   }
 
   draw() {
