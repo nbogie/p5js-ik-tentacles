@@ -39,6 +39,9 @@ function noisyMousePos(phase: number) {
 }
 
 function makeTargetProvider(phase: number) {
+  ///TODO: never put a target completely out of reach as system stretches
+  // out unnaturally, inorganically straight.
+  ///Instead if target would be out of reach bring it just within reach, on same line.
   const perliner = makePerlinNoisePosFn(phase);
   return () => (mouseHasMoved() ? noisyMousePos(phase) : perliner());
 }
