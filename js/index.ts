@@ -11,24 +11,19 @@ let defaultAppOptions: AppOptions = {
 
 let appOptions: AppOptions = defaultAppOptions;
 
+const gNumTentacles = 5;
+let gTentacles: Tentacle[] = [];
+
 function randomAppOptions(): AppOptions {
   return {
     shouldDrawShadows: randomBoolean()
   };
 }
 
-const gNumTentacles = 5;
-let gTentacles: Tentacle[] = [];
-function collect<T>(n: number, fn: (ix: number) => T): T[] {
-  const res = [];
-  for (let i = 0; i < n; i++) {
-    res.push(fn(i));
-  }
-  return res;
-}
 function mouseHasMoved() {
   return dist(pmouseX, pmouseY, mouseX, mouseY) > 0;
 }
+
 function noisyMousePos(phase: number) {
   //undulating attention
   const amp = map(sin(frameCount / 20), -1, 1, 10, 40);
@@ -62,30 +57,8 @@ function rebuildTentacles() {
   const baseHue = random(100);
   gTentacles = collect(gNumTentacles, ix => {
     const targetProvider = makeTargetProvider(ix * 1000);
-    return new Tentacle(200, height, 100, baseHue, targetProvider);
+    return new Tentacle(200, height, random(80, 100), baseHue, targetProvider);
   });
-}
-/* ------------------------------------------------------------------
- * SETUP
- */
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  rebuildTentacles();
-}
-
-function update() {
-  gTentacles.forEach(t => t.update());
-}
-
-/* ---------------------------------------------------------------------------
- * DRAW
- */
-function draw() {
-  update();
-  background(0);
-  fill("black");
-  noStroke();
-  gTentacles.forEach(t => t.draw());
 }
 
 function toggleShouldCastShadows() {
@@ -99,4 +72,29 @@ function keyPressed() {
   if (key == "s") {
     toggleShouldCastShadows();
   }
+}
+//------------------------------------------------------------------
+// SETUP
+// -----------------------------------------------------------------
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  rebuildTentacles();
+}
+
+//------------------------------------------------------------------
+// UPDATE
+// -----------------------------------------------------------------
+function update() {
+  gTentacles.forEach(t => t.update());
+}
+
+//------------------------------------------------------------------
+// DRAW
+// -----------------------------------------------------------------
+function draw() {
+  update();
+  background(0);
+  fill("black");
+  noStroke();
+  gTentacles.forEach(t => t.draw());
 }

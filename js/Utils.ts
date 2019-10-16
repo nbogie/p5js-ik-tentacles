@@ -96,3 +96,10 @@ function randomBoolean(): boolean {
 function mousePosAsVector(): p5.Vector {
   return createVector(mouseX, mouseY);
 }
+function collect<T>(n: number, fn: (ix: number) => T): T[] {
+  const res = [];
+  for (let i = 0; i < n; i++) {
+    res.push(fn(i));
+  }
+  return res;
+}
