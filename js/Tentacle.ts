@@ -5,6 +5,7 @@ class Tentacle {
   constructor(
     numSegments: number,
     fullLength: number,
+    maxThickness: number,
     baseHueOf100: number,
     provideTarget: () => p5.Vector
   ) {
@@ -26,6 +27,7 @@ class Tentacle {
           prevPos,
           null,
           1 - thickness,
+          maxThickness,
           avgSegmentLength,
           myHue
         );

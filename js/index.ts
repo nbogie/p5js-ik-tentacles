@@ -62,7 +62,7 @@ function rebuildTentacles() {
   const baseHue = random(100);
   gTentacles = collect(gNumTentacles, ix => {
     const targetProvider = makeTargetProvider(ix * 1000);
-    return new Tentacle(200, height, baseHue, targetProvider);
+    return new Tentacle(200, height, 100, baseHue, targetProvider);
   });
 }
 /* ------------------------------------------------------------------

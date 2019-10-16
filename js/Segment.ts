@@ -24,6 +24,7 @@ class Segment implements Target {
     b: p5.Vector,
     target: Target,
     thicknessScale: number,
+    maxThickness: number,
     myHue: number
   ) {
     this.id = id;
@@ -38,7 +39,7 @@ class Segment implements Target {
     const bright = 50;
     this.myColor = color(this.myHue, sat, random(bright - 10, bright + 10));
     this.edgeColor = color(this.myHue, sat, bright - 20);
-    this.thickness = thicknessScale * 50 * random(0.9, 1.1);
+    this.thickness = thicknessScale * maxThickness * random(0.9, 1.1);
     this.targetColor = randomColor();
   }
   pos(): p5.Vector {
@@ -90,12 +91,13 @@ class Segment implements Target {
     posA: p5.Vector,
     target: Target,
     thicknessScale: number,
+    maxThickness: number,
     len: number,
     myHue: number
   ) {
     const p1 = posA.copy();
     const p2 = p1.copy().add(p5.Vector.random2D().mult(len));
-    return new Segment(id, p1, p2, target, thicknessScale, myHue);
+    return new Segment(id, p1, p2, target, thicknessScale, maxThickness, myHue);
   }
   update(): void {
     this.seekTarget(this.target.pos());
