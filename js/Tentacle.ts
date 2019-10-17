@@ -2,11 +2,15 @@ interface TargetProvider {
   pos(): p5.Vector;
 }
 
+interface HeldDOMWord {
+  elem: HTMLElement;
+  originalPosAndBounds: TargetWordPos;
+}
 class Tentacle {
   segments: Segment[];
   provideTarget: TargetProvider;
 
-  heldWord?: Node;
+  heldWord?: HeldDOMWord;
 
   constructor(
     numSegments: number,
