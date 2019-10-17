@@ -79,10 +79,13 @@ function keyPressed() {
     toggleShouldCastShadows();
   }
   if (key == " ") {
-    catchTargetWord();//document.getElementById("targetword"), gTentacles[4]);
-    //catchTargetWord(document.getElementsByClassName("wordtoeat")[0], gTentacles[3]);
+    const wordNodesToCatch = findTargetWords();
+    wordNodesToCatch.forEach((node, ix) => {
+      catchTargetWord(node, gTentacles[ix]);
+    });
   }
 }
+
 //------------------------------------------------------------------
 // SETUP
 // -----------------------------------------------------------------
@@ -99,17 +102,21 @@ function setup() {
 // UPDATE
 // -----------------------------------------------------------------
 function update() {
-  gTentacles[0].setNewTargetProvider({ pos: () => getPosOfTargetWord().pos });
-  gTentacles.forEach(t => t.update());
-  if (gHeldWordElem) {
-    moveHeldWordTo(gTentacles[4].lastSegment().b);
-    rotateHeldWord(gTentacles[4].lastSegment().getAngle())
-    )
-  }
+  const targetWords = findTargetWords();
+  gTentacles[0].setNewTargetProvider({
+    pos: () => getPosOfTargetWord(targetWords[0]).pos
+  });
+  gTentacles.forEach(t => {
+    t.update();
+    if (t.heldWord) {
+      moveHeldWordTo(t.heldWord, t.lastSegment().b);
+      rotateHeldWord(t.heldWord, t.lastSegment().getAngle());
+    }
+  });
 }
 
-function rotateHeldWord(heading: number){
-    gHeldWordElem.style.transform= 'rotate('+degrees(heading+90)+'deg)'; 
+function rotateHeldWord(elem: Node, heading: number) {
+  elem.style.transform = "rotate(" + degrees(heading + 90) + "deg)";
 }
 //------------------------------------------------------------------
 // DRAW
@@ -120,7 +127,7 @@ function draw() {
   fill("black");
   noStroke();
   gTentacles.forEach(t => t.draw());
-  markTargetWord();
+  markTargetWord(findTargetWords()[0]);
 }
 
 interface TargetWordPos {
@@ -132,12 +139,8 @@ interface TargetWordPos {
   height: number;
   pos: p5.Vector;
 }
-function getTargetWordElem() {
-  return document.getElementById("targetword");
-}
 
-function getPosOfTargetWord(): TargetWordPos {
-  const el = getTargetWordElem();
+function getPosOfTargetWord(el: Element): TargetWordPos {
   const b = el.getBoundingClientRect();
   return {
     left: b.left,
@@ -150,38 +153,37 @@ function getPosOfTargetWord(): TargetWordPos {
   };
 }
 
-function markTargetWord(): void {
-  const p: TargetWordPos = getPosOfTargetWord();
+function markTargetWord(elem: Element): void {
+  const p: TargetWordPos = getPosOfTargetWord(elem);
   noFill();
   rectMode(CENTER);
   stroke("red");
   rect(p.pos.x, p.pos.y, p.width, p.height);
 }
 
-let gHeldWordElem: Node;
-
-function moveHeldWordTo(newPos: p5.Vector): void {
-  const elem = gHeldWordElem;
-  console.log("moving word to: ", newPos);
+function moveHeldWordTo(elem: Node, newPos: p5.Vector): void {
   elem.style.position = "absolute";
   elem.style.top = newPos.y + "px";
   elem.style.left = newPos.x + "px";
-
 }
-function catchTargetWord():void {//(elem:Node, tentacle: Tentacle): void {
-  
-  const targetElem = getTargetWordElem();
+function findTargetWords(): Element[] {
+  return Array.from(document.getElementsByClassName("wordtoeat"));
+}
+function catchTargetWord(elem: HTMLElement, tentacle: Tentacle): void {
+  const targetElem = elem;
 
   const clone = targetElem.cloneNode(true);
   targetElem.style = "visibility: hidden";
 
-  //targetElem.parentElement.append(clone);
+  //TODO: have the clone maintain the style of the original
+  //Styling is lost when we append to the body
+  //TODO: Probably best to simply add a class to the word when it is "picked up"
   document.body.append(clone);
+
   clone.style.position = "absolute";
   clone.style.color = "white";
   clone.style.fontFamily = "OldTypewriter";
   clone.style.fontSize = "32";
 
-  gHeldWordElem = clone;
-  moveHeldWordTo(createVector(400, 300));
+  tentacle.heldWord = clone;
 }

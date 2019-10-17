@@ -6,6 +6,8 @@ class Tentacle {
   segments: Segment[];
   provideTarget: TargetProvider;
 
+  heldWord?: Node;
+
   constructor(
     numSegments: number,
     fullLength: number,
