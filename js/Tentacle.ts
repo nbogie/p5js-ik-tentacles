@@ -1,13 +1,17 @@
+interface TargetProvider {
+  pos(): p5.Vector;
+}
+
 class Tentacle {
   segments: Segment[];
-  provideTarget: () => p5.Vector;
+  provideTarget: TargetProvider;
 
   constructor(
     numSegments: number,
     fullLength: number,
     maxThickness: number,
     baseHueOf100: number,
-    provideTarget: () => p5.Vector
+    provideTarget: TargetProvider
   ) {
     const myHue = random(baseHueOf100 - 5, baseHueOf100 + 5);
     const avgSegmentLength = fullLength / numSegments;
@@ -39,12 +43,22 @@ class Tentacle {
 
     let thinnerSegment: Segment = null;
     this.segments.reverse().forEach(seg => {
-      seg.target = thinnerSegment
-        ? thinnerSegment
-        : { pos: this.provideTarget };
+      seg.target = thinnerSegment ? thinnerSegment : this.provideTarget;
       thinnerSegment = seg;
     });
     this.segments.reverse();
+  }
+  lastSegment(): Segment {
+    return this.segments.length > 0
+      ? this.segments[this.segments.length - 1]
+      : undefined;
+  }
+  firstSegment(): Segment {
+    return this.segments.length > 0 ? this.segments[0] : undefined;
+  }
+  setNewTargetProvider(givenTargetProvider: TargetProvider): void {
+    this.provideTarget = givenTargetProvider;
+    this.lastSegment().target = givenTargetProvider;
   }
   update() {
     const originalLockedPos = this.segments[0].a.copy();

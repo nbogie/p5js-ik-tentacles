@@ -1,6 +1,7 @@
 <html>
   <head>
     <script src="libs/p5.min.js"></script>
+    <script src="libs/p5.dom.min.js"></script>
     <script src="libs/p5.sound.min.js"></script>
     <script src="build/build.js"></script>
 
@@ -13,8 +14,25 @@
         padding: 0px;
         margin: 0px;
       }
+      @font-face {
+        font-family: "OldTypewriter";
+        src: url("./fonts/OldTypewriter2.0.ttf") format("truetype");
+      }
+      #bigtext {
+        font-family: "OldTypewriter";
+        font-size: 32;
+        color: white;
+        position: absolute;
+        top: 200;
+        left: 100;
+      }
     </style>
     <script></script>
   </head>
-  <body></body>
+  <body>
+    <div id="bigtext">
+      In his house at R'lyeh, <span id="targetword">dead</span> Cthulu waits
+      dreaming
+    </div>
+  </body>
 </html>

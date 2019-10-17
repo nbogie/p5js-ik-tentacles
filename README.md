@@ -2,3 +2,6 @@ This is a quick take on the Coding Train's ["Coding Challenge #64.2: Inverse Kin
 
 ![playing with Canva](Inverse%20Kinematics%20Tentacles.png?raw=true)
 
+Credits:
+
+- Old Typewriter typeface by M-Dfonts (free for personal use): https://www.dafont.com/old-typewriter.font

@@ -14,6 +14,12 @@ let appOptions: AppOptions = defaultAppOptions;
 const gNumTentacles = 5;
 let gTentacles: Tentacle[] = [];
 
+const lovecraftQuotes = [
+  "It was not meant that we should voyage far",
+  "A mountain walked or stumbled",
+  "In his house at R'lyeh, dead Cthulu waits dreaming"
+];
+
 function randomAppOptions(): AppOptions {
   return {
     shouldDrawShadows: randomBoolean()
@@ -33,12 +39,12 @@ function noisyMousePos(phase: number) {
   return mousePosAsVector().add(createVector(offsetX, offsetY));
 }
 
-function makeTargetProvider(phase: number) {
+function makeTargetProvider(phase: number): TargetProvider {
   ///TODO: never put a target completely out of reach as system stretches
   // out unnaturally, inorganically straight.
   ///Instead if target would be out of reach bring it just within reach, on same line.
   const perliner = makePerlinNoisePosFn(phase);
-  return () => (mouseHasMoved() ? noisyMousePos(phase) : perliner());
+  return { pos: () => (mouseHasMoved() ? noisyMousePos(phase) : perliner()) };
 }
 function makePerlinNoisePosFn(phase: number) {
   return () =>
@@ -77,7 +83,11 @@ function keyPressed() {
 // SETUP
 // -----------------------------------------------------------------
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  const myCanvas = createCanvas(windowWidth, windowHeight);
+  myCanvas.parent(document.body);
+  myCanvas.style("z-index", "-1");
+  myCanvas.position(0, 0);
+
   rebuildTentacles();
 }
 
@@ -85,6 +95,7 @@ function setup() {
 // UPDATE
 // -----------------------------------------------------------------
 function update() {
+  gTentacles[0].setNewTargetProvider({ pos: () => getPosOfTargetWord().pos });
   gTentacles.forEach(t => t.update());
 }
 
@@ -97,4 +108,44 @@ function draw() {
   fill("black");
   noStroke();
   gTentacles.forEach(t => t.draw());
+  markTargetWord();
+}
+
+interface TargetWordPos {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  width: number;
+  height: number;
+  pos: p5.Vector;
+}
+function getTargetWordElem() {
+  return document.getElementById("targetword");
+}
+
+function getPosOfTargetWord(): TargetWordPos {
+  const el = getTargetWordElem();
+  const b = el.getBoundingClientRect();
+  return {
+    left: b.left,
+    right: b.right,
+    top: b.top,
+    bottom: b.bottom,
+    width: b.width,
+    height: b.height,
+    pos: createVector(b.left + b.width / 2, b.top + b.height / 2)
+  };
+}
+
+function markTargetWord(): void {
+  const p: TargetWordPos = getPosOfTargetWord();
+  noFill();
+  rectMode(CENTER);
+  stroke("red");
+  rect(p.pos.x, p.pos.y, p.width, p.height);
+}
+
+function catchTargetWord(): void {
+  getTargetWordElem().style = "visibility:hidden";
 }

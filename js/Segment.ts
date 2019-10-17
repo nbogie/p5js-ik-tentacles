@@ -1,11 +1,8 @@
-interface Target {
-  pos(): p5.Vector;
-}
 function randomColor(): p5.Color {
   colorMode(HSB, 100);
   return color(random(100), 100, 100);
 }
-class Segment implements Target {
+class Segment implements TargetProvider {
   deltaToTarget: p5.Vector;
   a: p5.Vector;
   b: p5.Vector;
@@ -15,14 +12,14 @@ class Segment implements Target {
   thickness: number;
   len: number;
   isFixed: boolean;
-  target: Target;
+  target: TargetProvider;
   targetColor: p5.Color;
   myHue: number;
   constructor(
     id: string,
     a: p5.Vector,
     b: p5.Vector,
-    target: Target,
+    target: TargetProvider,
     thicknessScale: number,
     maxThickness: number,
     myHue: number
@@ -89,7 +86,7 @@ class Segment implements Target {
   static createRandomAt(
     id: string,
     posA: p5.Vector,
-    target: Target,
+    target: TargetProvider,
     thicknessScale: number,
     maxThickness: number,
     len: number,
