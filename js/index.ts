@@ -78,6 +78,10 @@ function keyPressed() {
   if (key == "s") {
     toggleShouldCastShadows();
   }
+  if (key == " ") {
+    catchTargetWord();//document.getElementById("targetword"), gTentacles[4]);
+    //catchTargetWord(document.getElementsByClassName("wordtoeat")[0], gTentacles[3]);
+  }
 }
 //------------------------------------------------------------------
 // SETUP
@@ -97,8 +101,16 @@ function setup() {
 function update() {
   gTentacles[0].setNewTargetProvider({ pos: () => getPosOfTargetWord().pos });
   gTentacles.forEach(t => t.update());
+  if (gHeldWordElem) {
+    moveHeldWordTo(gTentacles[4].lastSegment().b);
+    rotateHeldWord(gTentacles[4].lastSegment().getAngle())
+    )
+  }
 }
 
+function rotateHeldWord(heading: number){
+    gHeldWordElem.style.transform= 'rotate('+degrees(heading+90)+'deg)'; 
+}
 //------------------------------------------------------------------
 // DRAW
 // -----------------------------------------------------------------
@@ -146,6 +158,30 @@ function markTargetWord(): void {
   rect(p.pos.x, p.pos.y, p.width, p.height);
 }
 
-function catchTargetWord(): void {
-  getTargetWordElem().style = "visibility:hidden";
+let gHeldWordElem: Node;
+
+function moveHeldWordTo(newPos: p5.Vector): void {
+  const elem = gHeldWordElem;
+  console.log("moving word to: ", newPos);
+  elem.style.position = "absolute";
+  elem.style.top = newPos.y + "px";
+  elem.style.left = newPos.x + "px";
+
+}
+function catchTargetWord():void {//(elem:Node, tentacle: Tentacle): void {
+  
+  const targetElem = getTargetWordElem();
+
+  const clone = targetElem.cloneNode(true);
+  targetElem.style = "visibility: hidden";
+
+  //targetElem.parentElement.append(clone);
+  document.body.append(clone);
+  clone.style.position = "absolute";
+  clone.style.color = "white";
+  clone.style.fontFamily = "OldTypewriter";
+  clone.style.fontSize = "32";
+
+  gHeldWordElem = clone;
+  moveHeldWordTo(createVector(400, 300));
 }
