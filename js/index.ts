@@ -13,6 +13,7 @@ let appOptions: AppOptions = defaultAppOptions;
 
 const gNumTentacles = 5;
 let gTentacles: Tentacle[] = [];
+let gCanvas; //: Renderer;  //typescript can't find this
 
 const lovecraftQuotes = [
   "It was not meant that we should voyage far",
@@ -89,14 +90,21 @@ function catchAllTargetWords(): void {
     catchTargetElem(elem, gTentacles[ix]);
   });
 }
+
+//https://github.com/processing/p5.js/wiki/Positioning-your-canvas
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
 //------------------------------------------------------------------
 // SETUP
 // -----------------------------------------------------------------
 function setup() {
-  const myCanvas = createCanvas(windowWidth, windowHeight);
-  myCanvas.parent(document.body);
-  myCanvas.style("z-index", "-1");
-  myCanvas.position(0, 0);
+  gCanvas = createCanvas(windowWidth, windowHeight);
+  gCanvas.parent(document.body);
+  gCanvas.style("z-index", "-1"); //behind the HTML
+  gCanvas.position(0, 0);
+  gCanvas.style("display", "block"); // avoids scrollbars
 
   rebuildTentacles();
 }
