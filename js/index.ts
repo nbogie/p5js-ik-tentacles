@@ -1,6 +1,8 @@
 "use strict";
 p5.disableFriendlyErrors = true;
 
+// TODO: add B & W, film grain, jitters, blurred corners.
+
 interface AppOptions {
   shouldDrawShadows: boolean;
 }
@@ -47,6 +49,7 @@ function makeTargetProvider(phase: number): TargetProvider {
   const perliner = makePerlinNoisePosFn(phase);
   return { pos: () => (mouseHasMoved() ? noisyMousePos(phase) : perliner()) };
 }
+
 function makePerlinNoisePosFn(phase: number) {
   return () =>
     createVector(
@@ -60,6 +63,7 @@ function makePerlinNoisePosFn(phase: number) {
       height * noise(88888 + phase + frameCount / 100)
     );
 }
+
 function rebuildTentacles() {
   const baseHue = random(100);
   gTentacles = collect(gNumTentacles, ix => {
@@ -75,6 +79,7 @@ function toggleShouldCastShadows() {
 function mousePressed() {
   rebuildTentacles();
 }
+
 function keyPressed() {
   if (key == "s") {
     toggleShouldCastShadows();
@@ -132,6 +137,7 @@ function update() {
 function rotateHeldWord(elem: HTMLElement, heading: number) {
   elem.style.transform = "rotate(" + degrees(heading + 90) + "deg)";
 }
+
 //------------------------------------------------------------------
 // DRAW
 // -----------------------------------------------------------------
@@ -173,11 +179,13 @@ function moveHeldWordTo(heldWord: HeldDOMWord, newPos: p5.Vector): void {
   elem.style.left = newPos.x - boundsInfo.width / 2 + "px";
   elem.style.top = newPos.y - boundsInfo.height / 2 + "px";
 }
+
 function findTargetWords(): HTMLElement[] {
   return Array.from(document.getElementsByClassName(
     "wordtoeat"
   ) as HTMLCollectionOf<HTMLElement>);
 }
+
 function catchTargetElem(elem: HTMLElement, tentacle: Tentacle): void {
   const targetElem: HTMLElement = elem;
   const clone = targetElem.cloneNode(true) as HTMLElement; //only this has style
