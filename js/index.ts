@@ -186,6 +186,29 @@ function findTargetWords(): HTMLElement[] {
   ) as HTMLCollectionOf<HTMLElement>);
 }
 
+function makeAnimatingTargetProvider(startPos: p5.Vector) {
+  let isRetreating = true;
+  let tgtPos = createVector(random(width * 0.3, width * 0.6), height * 1);
+  const animLength = 100;
+  let animFrameCount = 0;
+
+  return {
+    pos: () => {
+      const currPos = startPos.copy().lerp(tgtPos, animFrameCount / animLength);
+      if (isRetreating) {
+        if (tgtPos.dist(currPos) < 10) {
+          isRetreating = false;
+          animFrameCount = 0;
+          startPos = tgtPos.copy();
+          tgtPos = createVector(random(width * 0.3, width * 0.6), height * 0.3);
+        }
+      }
+      animFrameCount++;
+      return currPos;
+    }
+  };
+}
+
 function catchTargetElem(elem: HTMLElement, tentacle: Tentacle): void {
   const targetElem: HTMLElement = elem;
   const clone = targetElem.cloneNode(true) as HTMLElement; //only this has style
@@ -193,6 +216,13 @@ function catchTargetElem(elem: HTMLElement, tentacle: Tentacle): void {
 
   document.body.append(clone);
   clone.classList.add("caught"); //this includes absolute positioning
+
+  gTentacles.forEach(t => {
+    const targetProvider = makeAnimatingTargetProvider(
+      t.lastSegment().b.copy()
+    );
+    t.setNewTargetProvider(targetProvider);
+  });
 
   tentacle.heldWord = {
     elem: clone,
