@@ -1,5 +1,5 @@
 "use strict";
-p5.disableFriendlyErrors = true;
+//p5.disableFriendlyErrors = true;
 
 // TODO: add B & W, film grain, jitters, blurred corners.
 
