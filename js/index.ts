@@ -1,5 +1,5 @@
 "use strict";
-p5.disableFriendlyErrors = true;
+//p5.disableFriendlyErrors = true;
 
 interface AppOptions {
   shouldDrawShadows: boolean;
