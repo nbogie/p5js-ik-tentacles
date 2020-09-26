@@ -33,7 +33,7 @@ function mouseHasMoved() {
   return dist(pmouseX, pmouseY, mouseX, mouseY) > 0;
 }
 
-function noisyMousePos(phase: number) {
+function mousePosPlusNoise(phase: number) {
   //undulating attention
   const amp = map(sin(frameCount / 20), -1, 1, 10, 40);
 
@@ -46,8 +46,8 @@ function makeTargetProvider(phase: number): TargetProvider {
   ///TODO: never put a target completely out of reach as system stretches
   // out unnaturally, inorganically straight.
   ///Instead if target would be out of reach bring it just within reach, on same line.
-  const perliner = makePerlinNoisePosFn(phase);
-  return { pos: () => (mouseHasMoved() ? noisyMousePos(phase) : perliner()) };
+  const perlinNoisePosition = makePerlinNoisePosFn(phase);
+  return { pos: () => mouseHasMoved() ? mousePosPlusNoise(phase) : perlinNoisePosition() };
 }
 
 function makePerlinNoisePosFn(phase: number) {
