@@ -2,6 +2,8 @@
 //p5.disableFriendlyErrors = true;
 
 // TODO: add B & W, film grain, jitters, blurred corners.
+//A shorthand for use with static functions
+const V = p5.Vector;
 
 interface AppOptions {
   shouldDrawShadows: boolean;

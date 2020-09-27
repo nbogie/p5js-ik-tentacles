@@ -73,9 +73,7 @@ class Tentacle {
       s.update();
     }
     this.segments.reverse();
-    const moveBackDelta = originalLockedPos
-      .copy()
-      .sub(this.segments[0].a.copy());
+    const moveBackDelta = V.sub(originalLockedPos, this.segments[0].a);
     this.segments.forEach(s => s.translate(moveBackDelta));
   }
 
