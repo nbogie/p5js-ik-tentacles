@@ -20,4 +20,4 @@ To start dev, with build in watch mode, and launch a browser, use:
 
 not needed - index.html already looks for `build/build.js`
 
-![playing with Canva](Inverse%20Kinematics%20Tentacles.png?raw=true)
+![playing with Canva](./screenshots/InverseKinematicsTentacles.png?raw=true)
