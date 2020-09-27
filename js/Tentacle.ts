@@ -54,17 +54,18 @@ class Tentacle {
     });
     this.segments.reverse();
   }
-  lastSegment(): Segment {
+  lastSegmentTheTip(): Segment {
     return this.segments.length > 0
       ? this.segments[this.segments.length - 1]
       : undefined;
   }
-  firstSegment(): Segment {
+
+  firstSegmentTheRoot(): Segment {
     return this.segments.length > 0 ? this.segments[0] : undefined;
   }
   setNewTargetProvider(givenTargetProvider: TargetProvider): void {
     this.provideTarget = givenTargetProvider;
-    this.lastSegment().target = givenTargetProvider;
+    this.lastSegmentTheTip().target = givenTargetProvider;
   }
   update() {
     const originalLockedPos = this.segments[0].a.copy();

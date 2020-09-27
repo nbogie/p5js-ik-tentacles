@@ -40,6 +40,10 @@ function mousePosPlusNoise(phase: number) {
   return mousePosAsVector().add(createVector(offsetX, offsetY));
 }
 
+//TODO: don't try to have interior segments and the tip all consume by the same
+// TargetProvider interface.  TargetProviders for tentacle tips want to consider many other things:
+// mouse position, lerping, history, obstacles, user interface
+// whereas interior segments just need to know the position of their sibling.
 function makeTargetProvider(phase: number): TargetProvider {
   ///TODO: never put a target completely out of reach as system stretches
   // out unnaturally, inorganically straight.
@@ -136,8 +140,8 @@ function update() {
   gTentacles.forEach((t) => {
     t.update();
     if (t.heldWord) {
-      moveHeldWordTo(t.heldWord, t.lastSegment().b);
-      rotateHeldWord(t.heldWord.elem, t.lastSegment().getAngle());
+      moveHeldWordTo(t.heldWord, t.lastSegmentTheTip().b);
+      rotateHeldWord(t.heldWord.elem, t.lastSegmentTheTip().getAngle());
     }
   });
 }
@@ -224,7 +228,7 @@ function catchTargetElem(elem: HTMLElement, tentacle: Tentacle): void {
 
   gTentacles.forEach((t) => {
     const targetProvider = makeAnimatingTargetProvider(
-      t.lastSegment().b.copy()
+      t.lastSegmentTheTip().b.copy()
     );
     t.setNewTargetProvider(targetProvider);
   });
