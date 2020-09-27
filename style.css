@@ -1,10 +1,30 @@
-html, body {
-  margin: 0;
-  padding: 0;
+* {
+  padding: 0px;
+  margin: 0px;
+}
+@font-face {
+  font-family: "OldTypewriter";
+  src: url("./fonts/OldTypewriter2.0.ttf") format("truetype");
+}
+#bigtext {
+  position: absolute;
+  top: 200;
+  left: 100;
+}
+#bigtext,
+.caught {
+  font-family: "OldTypewriter";
+  font-size: 32;
+  color: maroon;
+}
+.caught {
+  position: absolute;
 }
 
+/* Canvas styling is set in the sketch JavaScript. */
+/* 
 canvas {
   position: absolute;
   top: 0;
   left: 0;
-}
+} */
