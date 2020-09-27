@@ -95,15 +95,6 @@ function mousePosPlusNoise(phase: number) {
   return mousePosAsVector().add(createVector(offsetX, offsetY));
 }
 
-function noisyMousePos(phase: number) {
-  //undulating attention
-  const amp = map(sin(frameCount / 20), -1, 1, 10, 40);
-
-  const offsetX = map(noise(3 * phase + frameCount / 20), 0, 1, -amp, amp);
-  const offsetY = map(noise(4 * phase + frameCount / 20), 0, 1, -amp, amp);
-  return mousePosAsVector().add(createVector(offsetX, offsetY));
-}
-
 //TODO: don't try to have interior segments and the tip all consume by the same
 // TargetProvider interface.  TargetProviders for tentacle tips want to consider many other things:
 // mouse position, lerping, history, obstacles, user interface
