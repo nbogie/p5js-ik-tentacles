@@ -38,7 +38,7 @@ class Tentacle {
     this.segments[0].isFixed = true;
 
     let thinnerSegment: Segment = null;
-    this.segments.reverse().forEach(seg => {
+    this.segments.reverse().forEach((seg) => {
       seg.target = thinnerSegment
         ? thinnerSegment
         : { pos: this.provideTarget };
@@ -54,7 +54,7 @@ class Tentacle {
     }
     this.segments.reverse();
     const moveBackDelta = V.sub(originalLockedPos, this.segments[0].a);
-    this.segments.forEach(s => s.translate(moveBackDelta));
+    this.segments.forEach((s) => s.translate(moveBackDelta));
   }
 
   draw() {

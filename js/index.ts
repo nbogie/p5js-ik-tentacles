@@ -11,7 +11,7 @@ interface AppOptions {
 
 let defaultAppOptions: AppOptions = {
   shouldDrawShadows: true,
-  shouldDrawSilhoutte : true
+  shouldDrawSilhoutte: true,
 };
 
 let appOptions: AppOptions = defaultAppOptions;
@@ -54,7 +54,7 @@ function makePerlinNoisePosFn(phase: number) {
 }
 function rebuildTentacles() {
   const baseHue = random(100);
-  gTentacles = collect(gNumTentacles, ix => {
+  gTentacles = collect(gNumTentacles, (ix) => {
     const targetProvider = makeTargetProvider(ix * 1000);
     return new Tentacle(200, height, random(80, 100), baseHue, targetProvider);
   });
@@ -91,7 +91,7 @@ function setup() {
 // UPDATE
 // -----------------------------------------------------------------
 function update() {
-  gTentacles.forEach(t => t.update());
+  gTentacles.forEach((t) => t.update());
 }
 
 //------------------------------------------------------------------
@@ -100,5 +100,5 @@ function update() {
 function draw() {
   update();
   background(0);
-  gTentacles.forEach(t => t.draw());
+  gTentacles.forEach((t) => t.draw());
 }
