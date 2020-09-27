@@ -2,11 +2,6 @@ interface Target {
   pos(): p5.Vector;
 }
 
-function randomColor(): p5.Color {
-  colorMode(HSB, 100);
-  return color(random(100), 100, 100);
-}
-
 class Segment {
   a: p5.Vector;
   b: p5.Vector;
