@@ -23,7 +23,6 @@ class Tentacle {
       0.9,
       (thickness, ix) => {
         const segment = Segment.createRandomSegmentAt(
-          "Seg" + ix,
           prevPos,
           null,
           1 - thickness,

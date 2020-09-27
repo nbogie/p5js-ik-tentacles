@@ -10,7 +10,6 @@ function randomColor(): p5.Color {
 class Segment {
   a: p5.Vector;
   b: p5.Vector;
-  id: string;
   myColor: p5.Color;
   edgeColor: p5.Color;
   thickness: number;
@@ -21,7 +20,6 @@ class Segment {
   myHue: number;
 
   constructor(
-    id: string,
     a: p5.Vector,
     b: p5.Vector,
     nextSegment: Segment,
@@ -29,7 +27,6 @@ class Segment {
     maxThickness: number,
     myHue: number
   ) {
-    this.id = id;
     this.a = a.copy();
     this.b = b.copy();
     this.isFixed = false;
@@ -92,7 +89,6 @@ class Segment {
   }
 
   static createRandomSegmentAt(
-    id: string,
     posA: p5.Vector,
     nextSegment: Segment,
     thicknessScale: number,
@@ -103,7 +99,6 @@ class Segment {
     const p1 = posA.copy();
     const p2 = V.add(p1, V.random2D().mult(len));
     return new Segment(
-      id,
       p1,
       p2,
       nextSegment,
