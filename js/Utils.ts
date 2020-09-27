@@ -18,9 +18,7 @@ function rotateVertexAround(
   rotOrigin: p5.Vector,
   angleRad: number
 ): p5.Vector {
-  return vertex
-    .copy()
-    .sub(rotOrigin)
+  return V.sub(vertex, rotOrigin)
     .rotate(angleRad)
     .add(rotOrigin);
 }
@@ -87,7 +85,7 @@ function averageVectors(vs: p5.Vector[]): p5.Vector {
   if (vs.length < 1) {
     return createVector(0, 0);
   }
-  return vs.reduce((v1, v2) => v1.copy().add(v2), vs[0]).div(vs.length);
+  return vs.reduce((v1, v2) => V.add(v1, v2), vs[0]).div(vs.length);
 }
 
 function randomBoolean(): boolean {

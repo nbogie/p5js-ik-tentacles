@@ -1,6 +1,9 @@
 "use strict";
 //p5.disableFriendlyErrors = true;
 
+//A shorthand for use with static functions
+const V = p5.Vector;
+
 interface AppOptions {
   shouldDrawShadows: boolean;
 }

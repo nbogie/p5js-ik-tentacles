@@ -95,7 +95,7 @@ class Segment implements Target {
     myHue: number
   ) {
     const p1 = posA.copy();
-    const p2 = p1.copy().add(p5.Vector.random2D().mult(len));
+    const p2 = V.add(p1, V.random2D().mult(len));
     return new Segment(id, p1, p2, target, thicknessScale, maxThickness, myHue);
   }
   update(): void {
@@ -103,8 +103,8 @@ class Segment implements Target {
   }
 
   seekTarget(targetPos: p5.Vector): void {
-    const deltaToTarget = targetPos.copy().sub(this.a);
-    this.a = targetPos.copy().add(
+    const deltaToTarget = V.sub(targetPos, this.a);
+    this.a = V.add(targetPos, 
       deltaToTarget
         .copy()
         .normalize()
