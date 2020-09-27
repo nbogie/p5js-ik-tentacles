@@ -22,7 +22,7 @@ class Tentacle {
       0,
       0.9,
       (thickness, ix) => {
-        const segment = Segment.createRandomAt(
+        const segment = Segment.createRandomSegmentAt(
           "Seg" + ix,
           prevPos,
           null,
@@ -39,13 +39,15 @@ class Tentacle {
 
     let thinnerSegment: Segment = null;
     this.segments.reverse().forEach((seg) => {
-      seg.target = thinnerSegment
-        ? thinnerSegment
-        : { pos: this.provideTarget };
+      seg.nextSegment = thinnerSegment;
       thinnerSegment = seg;
     });
     this.segments.reverse();
+    this.segments[this.segments.length - 1].endTarget = {
+      pos: this.provideTarget,
+    };
   }
+
   update() {
     const originalLockedPos = this.segments[0].a.copy();
     this.segments.reverse();

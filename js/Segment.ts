@@ -1,11 +1,13 @@
 interface Target {
   pos(): p5.Vector;
 }
+
 function randomColor(): p5.Color {
   colorMode(HSB, 100);
   return color(random(100), 100, 100);
 }
-class Segment implements Target {
+
+class Segment {
   a: p5.Vector;
   b: p5.Vector;
   id: string;
@@ -14,14 +16,15 @@ class Segment implements Target {
   thickness: number;
   len: number;
   isFixed: boolean;
-  target: Target;
-  targetColor: p5.Color;
+  nextSegment: Segment;
+  endTarget: Target;
   myHue: number;
+
   constructor(
     id: string,
     a: p5.Vector,
     b: p5.Vector,
-    target: Target,
+    nextSegment: Segment,
     thicknessScale: number,
     maxThickness: number,
     myHue: number
@@ -32,22 +35,25 @@ class Segment implements Target {
     this.isFixed = false;
     this.len = a.dist(b);
     colorMode(HSB, 100);
-    this.target = target;
+    this.nextSegment = nextSegment;
+    this.endTarget = null;
     this.myHue = myHue;
     const sat = 50;
     const bright = 50;
     this.myColor = color(this.myHue, sat, random(bright - 10, bright + 10));
     this.edgeColor = color(this.myHue, sat, bright - 20);
     this.thickness = thicknessScale * maxThickness * random(0.9, 1.1);
-    this.targetColor = randomColor();
   }
+
   pos(): p5.Vector {
     return this.a.copy();
   }
+
   translate(offset: p5.Vector) {
     this.a.add(offset);
     this.b.add(offset);
   }
+
   drawShadow() {
     const off = createVector(20, 10);
     stroke(color(this.myHue, 0, 0, 20));
@@ -60,18 +66,21 @@ class Segment implements Target {
       off.y + this.b.y
     );
   }
+
   drawSilhoutte() {
     noFill();
     stroke(10);
     strokeWeight(this.thickness);
     line(this.a.x, this.a.y, this.b.x, this.b.y);
   }
+
   drawInner() {
     //strokeCap(SQUARE);
     stroke(this.myColor);
     strokeWeight(this.thickness * 0.8);
     line(this.a.x, this.a.y, this.b.x, this.b.y);
   }
+
   static drawCrosshairAt(pos: p5.Vector, colr: p5.Color) {
     strokeWeight(1.8);
     stroke(colr);
@@ -81,14 +90,11 @@ class Segment implements Target {
     line(0, -8, 0, 8);
     pop();
   }
-  midPoint(): p5.Vector {
-    return this.a.copy().lerp(this.b, 0.5);
-  }
 
-  static createRandomAt(
+  static createRandomSegmentAt(
     id: string,
     posA: p5.Vector,
-    target: Target,
+    nextSegment: Segment,
     thicknessScale: number,
     maxThickness: number,
     len: number,
@@ -96,10 +102,25 @@ class Segment implements Target {
   ) {
     const p1 = posA.copy();
     const p2 = V.add(p1, V.random2D().mult(len));
-    return new Segment(id, p1, p2, target, thicknessScale, maxThickness, myHue);
+    return new Segment(
+      id,
+      p1,
+      p2,
+      nextSegment,
+      thicknessScale,
+      maxThickness,
+      myHue
+    );
   }
+
   update(): void {
-    this.seekTarget(this.target.pos());
+    if (this.nextSegment) {
+      //seek target segment
+      this.seekTarget(this.nextSegment.pos());
+    } else {
+      //seek some other target
+      this.seekTarget(this.endTarget.pos());
+    }
   }
 
   //Given a target position, move 'b' directly to that position and move 'a'
