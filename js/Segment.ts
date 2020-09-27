@@ -42,10 +42,7 @@ class Segment implements TargetProvider {
     return this.a.copy();
   }
   getAngle(): number {
-    return this.b
-      .copy()
-      .sub(this.a)
-      .heading();
+    return V.sub(this.b, this.a).heading();
   }
   translate(offset: p5.Vector) {
     this.a.add(offset);
