@@ -1,5 +1,17 @@
 This is a quick take on the Coding Train's ["Coding Challenge #64.2: Inverse Kinematics" (with p5.js)](https://www.youtube.com/watch?v=hbgDqyy8bIw)
 
+# Branches:
+
+- master: simple, which splits into:
+
+  EITHER:
+
+- master-monster-class: move tentacle handling into a Monster class, and out of index.
+
+  OR
+
+- feature-dom-interaction: tentacles interact with words in DOM
+
 # Build
 
 For **only** a build:
