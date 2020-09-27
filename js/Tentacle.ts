@@ -63,9 +63,10 @@ class Tentacle {
         s.drawShadow();
       }
     }
-
-    for (let s of this.segments) {
-      s.drawSilhoutte();
+    if (appOptions.shouldDrawSilhoutte) {
+      for (let s of this.segments) {
+        s.drawSilhoutte();
+      }
     }
     for (let s of this.segments) {
       s.drawInner();
