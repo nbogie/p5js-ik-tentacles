@@ -7,10 +7,12 @@ const V = p5.Vector;
 
 interface AppOptions {
   shouldDrawShadows: boolean;
+  shouldDrawSilhoutte: boolean;
 }
 
 let defaultAppOptions: AppOptions = {
-  shouldDrawShadows: true
+  shouldDrawShadows: true,
+  shouldDrawSilhoutte : true
 };
 
 let appOptions: AppOptions = defaultAppOptions;
@@ -24,12 +26,6 @@ const lovecraftQuotes = [
   "A mountain walked or stumbled",
   "In his house at R'lyeh, dead Cthulu waits dreaming"
 ];
-
-function randomAppOptions(): AppOptions {
-  return {
-    shouldDrawShadows: randomBoolean()
-  };
-}
 
 function mouseHasMoved() {
   return dist(pmouseX, pmouseY, mouseX, mouseY) > 0;
@@ -78,6 +74,10 @@ function toggleShouldCastShadows() {
   appOptions.shouldDrawShadows = !appOptions.shouldDrawShadows;
 }
 
+function toggleShouldDrawSilhoutte() {
+  appOptions.shouldDrawSilhoutte = !appOptions.shouldDrawSilhoutte;
+}
+
 function mousePressed() {
   rebuildTentacles();
 }
@@ -88,6 +88,9 @@ function keyPressed() {
   }
   if (key == " ") {
     catchAllTargetWords();
+  }
+  if (key == "o") {
+    toggleShouldDrawSilhoutte();
   }
 }
 
@@ -146,8 +149,6 @@ function rotateHeldWord(elem: HTMLElement, heading: number) {
 function draw() {
   update();
   background(0);
-  fill("black");
-  noStroke();
   gTentacles.forEach(t => t.draw());
 }
 
