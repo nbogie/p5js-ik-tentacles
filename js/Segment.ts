@@ -105,9 +105,26 @@ class Segment implements TargetProvider {
     this.seekTarget(this.target.pos());
   }
 
+  //Given a target position, move 'b' directly to that position and move 'a'
+  //so that it falls on the line from old 'a' to target,
+  //but conserves the segment's length, a-to-b.
+  //
+  //Important: overall tentacle reach is adjusted for elsewhere.  IGNORE it, here.
   seekTarget(targetPos: p5.Vector): void {
-    const deltaToTarget = V.sub(targetPos, this.a);
-    this.a = V.add(targetPos, deltaToTarget.copy().normalize().mult(-this.len));
+    // A straight line from this segment's base to the target.
+    // We can think of this as a pulled-taught guide line.
+    //New a and b will both lie on this "line".
+    const aToTarget = V.sub(targetPos, this.a);
+
+    // We're about to set b to be right on the target.
+    // Prepare a back-vector that will tell us NEW a, from this new b,
+    // based on our pulled-taught direction, and our (fixed) segment length.
+    const bToA = aToTarget.copy().setMag(-this.len);
+
+    //Put b right on the target.
     this.b = targetPos.copy();
+
+    //Calculate 'a' backwards from the new 'b', with our prepared back-vector.
+    this.a = V.add(this.b, bToA);
   }
 }
