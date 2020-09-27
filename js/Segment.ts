@@ -6,7 +6,6 @@ function randomColor(): p5.Color {
   return color(random(100), 100, 100);
 }
 class Segment implements Target {
-  deltaToTarget: p5.Vector;
   a: p5.Vector;
   b: p5.Vector;
   id: string;
@@ -105,7 +104,6 @@ class Segment implements Target {
 
   seekTarget(targetPos: p5.Vector): void {
     const deltaToTarget = targetPos.copy().sub(this.a);
-    this.deltaToTarget = deltaToTarget;
     this.a = targetPos.copy().add(
       deltaToTarget
         .copy()
