@@ -107,12 +107,7 @@ class Segment implements TargetProvider {
 
   seekTarget(targetPos: p5.Vector): void {
     const deltaToTarget = V.sub(targetPos, this.a);
-    this.a = V.add(targetPos, 
-      deltaToTarget
-        .copy()
-        .normalize()
-        .mult(-this.len)
-    );
+    this.a = V.add(targetPos, deltaToTarget.copy().normalize().mult(-this.len));
     this.b = targetPos.copy();
   }
 }

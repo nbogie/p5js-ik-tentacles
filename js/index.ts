@@ -12,7 +12,7 @@ interface AppOptions {
 
 let defaultAppOptions: AppOptions = {
   shouldDrawShadows: true,
-  shouldDrawSilhoutte : true
+  shouldDrawSilhoutte: true,
 };
 
 let appOptions: AppOptions = defaultAppOptions;
@@ -24,7 +24,7 @@ let gCanvas; //: Renderer;  //typescript can't find this
 const lovecraftQuotes = [
   "It was not meant that we should voyage far",
   "A mountain walked or stumbled",
-  "In his house at R'lyeh, dead Cthulu waits dreaming"
+  "In his house at R'lyeh, dead Cthulu waits dreaming",
 ];
 
 function mouseHasMoved() {
@@ -45,7 +45,10 @@ function makeTargetProvider(phase: number): TargetProvider {
   // out unnaturally, inorganically straight.
   ///Instead if target would be out of reach bring it just within reach, on same line.
   const perlinNoisePosition = makePerlinNoisePosFn(phase);
-  return { pos: () => mouseHasMoved() ? mousePosPlusNoise(phase) : perlinNoisePosition() };
+  return {
+    pos: () =>
+      mouseHasMoved() ? mousePosPlusNoise(phase) : perlinNoisePosition(),
+  };
 }
 
 function makePerlinNoisePosFn(phase: number) {
@@ -64,7 +67,7 @@ function makePerlinNoisePosFn(phase: number) {
 
 function rebuildTentacles() {
   const baseHue = random(100);
-  gTentacles = collect(gNumTentacles, ix => {
+  gTentacles = collect(gNumTentacles, (ix) => {
     const targetProvider = makeTargetProvider(ix * 1000);
     return new Tentacle(200, height, random(80, 100), baseHue, targetProvider);
   });
@@ -127,10 +130,10 @@ function update() {
   if (keyIsDown(67)) {
     //"c"
     gTentacles[0].setNewTargetProvider({
-      pos: () => getPosOfTargetWord(targetWords[0]).pos
+      pos: () => getPosOfTargetWord(targetWords[0]).pos,
     });
   }
-  gTentacles.forEach(t => {
+  gTentacles.forEach((t) => {
     t.update();
     if (t.heldWord) {
       moveHeldWordTo(t.heldWord, t.lastSegment().b);
@@ -149,7 +152,7 @@ function rotateHeldWord(elem: HTMLElement, heading: number) {
 function draw() {
   update();
   background(0);
-  gTentacles.forEach(t => t.draw());
+  gTentacles.forEach((t) => t.draw());
 }
 
 interface TargetWordPos {
@@ -171,7 +174,7 @@ function getPosOfTargetWord(el: Element): TargetWordPos {
     bottom: b.bottom,
     width: b.width,
     height: b.height,
-    pos: createVector(b.left + b.width / 2, b.top + b.height / 2)
+    pos: createVector(b.left + b.width / 2, b.top + b.height / 2),
   };
 }
 
@@ -184,9 +187,8 @@ function moveHeldWordTo(heldWord: HeldDOMWord, newPos: p5.Vector): void {
 }
 
 function findTargetWords(): HTMLElement[] {
-  return Array.from(document.getElementsByClassName(
-    "wordtoeat"
-  ) as HTMLCollectionOf<HTMLElement>);
+  const wordElems = document.getElementsByClassName("wordtoeat");
+  return Array.from(wordElems as HTMLCollectionOf<HTMLElement>);
 }
 
 function makeAnimatingTargetProvider(startPos: p5.Vector) {
@@ -208,7 +210,7 @@ function makeAnimatingTargetProvider(startPos: p5.Vector) {
       }
       animFrameCount++;
       return currPos;
-    }
+    },
   };
 }
 
@@ -220,7 +222,7 @@ function catchTargetElem(elem: HTMLElement, tentacle: Tentacle): void {
   document.body.append(clone);
   clone.classList.add("caught"); //this includes absolute positioning
 
-  gTentacles.forEach(t => {
+  gTentacles.forEach((t) => {
     const targetProvider = makeAnimatingTargetProvider(
       t.lastSegment().b.copy()
     );
@@ -229,6 +231,6 @@ function catchTargetElem(elem: HTMLElement, tentacle: Tentacle): void {
 
   tentacle.heldWord = {
     elem: clone,
-    originalPosAndBounds: getPosOfTargetWord(clone)
+    originalPosAndBounds: getPosOfTargetWord(clone),
   };
 }

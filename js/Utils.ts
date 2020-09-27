@@ -18,9 +18,7 @@ function rotateVertexAround(
   rotOrigin: p5.Vector,
   angleRad: number
 ): p5.Vector {
-  return V.sub(vertex, rotOrigin)
-    .rotate(angleRad)
-    .add(rotOrigin);
+  return V.sub(vertex, rotOrigin).rotate(angleRad).add(rotOrigin);
 }
 
 /** Find the minimum of the given list after applying fn() to each.
@@ -50,7 +48,7 @@ function repeat(num: number, fn: (ix: number) => void) {
 }
 
 function distributeUpTo(total: number, max: number, fn: (v: number) => void) {
-  repeat(total, ix => {
+  repeat(total, (ix) => {
     const val = (ix * max) / total;
     return fn(val);
   });
@@ -75,7 +73,7 @@ function distributeBetween(
   max: number,
   fn: (v: number, ix?: number) => void
 ) {
-  repeat(numSamples, ix => {
+  repeat(numSamples, (ix) => {
     const range = max - min;
     const val = min + (ix * range) / numSamples;
     return fn(val, ix);
