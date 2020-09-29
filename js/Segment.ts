@@ -104,6 +104,7 @@ class Segment {
   }
 
   update(): void {
+    //Intentionally treating these two cases separately.
     if (this.nextSegment) {
       //seek target segment
       this.seekTarget(this.nextSegment.pos());
