@@ -99,7 +99,7 @@ function mousePosPlusNoise(phase: number) {
 // TargetProvider interface.  TargetProviders for tentacle tips want to consider many other things:
 // mouse position, lerping, history, obstacles, user interface
 // whereas interior segments just need to know the position of their sibling.
-function makeTargetProvider(phase: number): TargetProvider {
+function makeTargetProvider(phase: number): Target {
   ///TODO: never put a target completely out of reach as system stretches
   // out unnaturally, inorganically straight.
   ///Instead if target would be out of reach bring it just within reach, on same line.

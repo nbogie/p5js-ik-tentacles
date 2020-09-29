@@ -1,14 +1,10 @@
-interface TargetProvider {
-  pos(): p5.Vector;
-}
-
 interface HeldDOMWord {
   elem: HTMLElement;
   originalPosAndBounds: TargetWordPos;
 }
 class Tentacle {
   segments: Segment[];
-  provideTarget: TargetProvider;
+  provideTarget: Target;
 
   heldWord?: HeldDOMWord;
 
@@ -17,7 +13,7 @@ class Tentacle {
     fullLength: number,
     maxThickness: number,
     baseHueOf100: number,
-    provideTarget: TargetProvider
+    provideTarget: Target
   ) {
     const myHue = random(baseHueOf100 - 5, baseHueOf100 + 5);
     const avgSegmentLength = fullLength / numSegments;
@@ -32,8 +28,7 @@ class Tentacle {
       0,
       0.9,
       (thickness, ix) => {
-        const segment = Segment.createRandomAt(
-          "Seg" + ix,
+        const segment = Segment.createRandomSegmentAt(
           prevPos,
           null,
           1 - thickness,
@@ -49,10 +44,13 @@ class Tentacle {
 
     let thinnerSegment: Segment = null;
     this.segments.reverse().forEach((seg) => {
-      seg.target = thinnerSegment ? thinnerSegment : this.provideTarget;
+      seg.nextSegment = thinnerSegment;
       thinnerSegment = seg;
     });
     this.segments.reverse();
+    this.segments[this.segments.length - 1].endTarget = {
+      pos: () => this.provideTarget.pos(),
+    };
   }
   lastSegmentTheTip(): Segment {
     return this.segments.length > 0
@@ -63,9 +61,9 @@ class Tentacle {
   firstSegmentTheRoot(): Segment {
     return this.segments.length > 0 ? this.segments[0] : undefined;
   }
-  setNewTargetProvider(givenTargetProvider: TargetProvider): void {
+  setNewTargetProvider(givenTargetProvider: Target): void {
     this.provideTarget = givenTargetProvider;
-    this.lastSegmentTheTip().target = givenTargetProvider;
+    this.lastSegmentTheTip().endTarget = givenTargetProvider;
   }
   update() {
     const originalLockedPos = this.segments[0].a.copy();
